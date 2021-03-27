@@ -79,12 +79,13 @@ def calcular_erros1_1(lista_x_exp, lista_x, lista_t):
                 maior_erro = erro
 
         lista_erro.append(maior_erro)
-
-    return lista_erro
+    
+    return lista_erro, max(lista_erro)
 
 #Resolve o exercício 1, iterando o cálculo do Método de Runge-Kutta e dos erros
 #obtidos para cada n e plotando um gráfico
 def exercicio1_1(T0, Tf, lista_n, x0, A, lista_x_exp):
+    lista_erro_max = []
     for n in lista_n:
         #Parâmetros do intervalo
         h = calcular_passo(T0, Tf, n)
@@ -93,20 +94,31 @@ def exercicio1_1(T0, Tf, lista_n, x0, A, lista_x_exp):
         #Runge-Kutta de Ordem 4 para calcular os valores dos vetores x
         lista_x = RK4(x0, h, lista_t, A)
 
-        #Cálculo dos erros, usando os valores explícitos de x
-        lista_erro = calcular_erros1_1(lista_x_exp, lista_x, lista_t)
+        #Cálculo dos erros, usando os valores explícitos de x, incluindo lista de maiores erros
+        lista_erro, erro_max = calcular_erros1_1(lista_x_exp, lista_x, lista_t)
+        lista_erro_max.append(erro_max)
 
         #Plotagem do Gráfico
         plt.plot(lista_t, lista_erro)
         plt.xlabel('t')
         plt.ylabel('Erro(t,n=' + str(n) + ')')
         plt.title('Erro dos valores aproximados de x para cada t num passo ' + str(h))
+
+        
+
         plt.show()
+    lista_R = []
+    for i in range (0,5):
+        lista_R.append(lista_erro_max[i]/lista_erro_max[i+1])
+        print("O valor de R"+str(i+1)+" eh igual a " +str(lista_R[i]))
+    plt.show()
 #---------------------------------------------------------------------------------------------------
 
 
 
 #Euler explicito, nessa parte vao ficar todos os metodos pedidos como de Euler explicito
+
+
 
 
 
