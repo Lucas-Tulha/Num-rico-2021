@@ -42,16 +42,18 @@ def RK4(x0, h, lista_t, A):
     #Inicia a lista de valores de vetores x
     lista_x = [x0]
 
+    xi = x0
+
     for t in lista_t:
         #k1
-        k1 = calcular_k1_1(x0, A)
-        x_prov = calcular_prox_ponto(x0, k1, h / 2) #x provisório
+        k1 = calcular_k1_1(xi, A)
+        x_prov = calcular_prox_ponto(xi, k1, h / 2) #x provisório
         #k2
         k2 = calcular_k1_1(x_prov, A)
-        x_prov = calcular_prox_ponto(x0, k2, h / 2)
+        x_prov = calcular_prox_ponto(xi, k2, h / 2)
         #k3
         k3 = calcular_k1_1(x_prov, A)
-        x_prov = calcular_prox_ponto(x0, k3, h)
+        x_prov = calcular_prox_ponto(xi, k3, h)
         #k4
         k4 = calcular_k1_1(x_prov, A)
 
@@ -59,8 +61,11 @@ def RK4(x0, h, lista_t, A):
         kp = (k1 + 2*k2 + 2*k3 + k4) / 6
 
         #valor de x estimado para este t:
-        x = calcular_prox_ponto(x0, kp, h)
+        x = calcular_prox_ponto(xi, kp, h)
         lista_x.append(x)
+
+        #Atualiza o valor de xi para x
+        xi = x
 
     return lista_x
 
@@ -125,8 +130,14 @@ def exercicio2_1(T0, Tf, n, x0, y0, derivadaX, derivadaY, plotar):
     lista_t = calcular_lista_t(T0, Tf, h)
 
     #Cálculo do Método de Euler Explícito
-    lista_x = euler_exp(h, x0, y0, derivadaX, lista_t)
-    lista_y = euler_exp(h, y0, x0, derivadaY, lista_t)
+    lista_x = []
+    lista_y = []
+
+
+
+
+
+
 
     #Plotagem do Gráfico
     if plotar:
@@ -136,4 +147,13 @@ def exercicio2_1(T0, Tf, n, x0, y0, derivadaX, derivadaY, plotar):
         plt.show()
 #---------------------------------------------------------------------------------------------------
 
-#Euler implicito, nessa parte vao ficar todos os metodos pedidos como de Euler implicito
+########################EXERCICO 1 PARTE 2##########################################################
+
+def exercicio1_2(T0, Tf, funcao_x, x0, A, derivada_x):
+   
+    n=5000
+    h =  calcular_passo(T0, Tf, n)
+    lista_T = calcular_lista_t(T0, Tf, h)
+    
+    for t in range 
+    T = lista_T[i]

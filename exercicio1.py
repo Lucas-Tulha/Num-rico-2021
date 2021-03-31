@@ -29,10 +29,9 @@ x0 = np.array([1, 1, 1, -1])
 lista_x_exp = [x1, x2, x3, x4]
 #---------------------------------------------------------------------------------------------------
 
-
-#Calculo de Ri
-
-
-
-#Executar Função
+#Executar Função 
 exercicio1_1(T0, Tf, lista_n, x0, A, lista_x_exp)
+
+#Calculo da questão 1 parte 2, Euler implicito
+
+exercicio1_2(T0, Tf, funcao_x, x0, A, derivada_x)
