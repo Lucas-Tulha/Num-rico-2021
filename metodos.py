@@ -79,7 +79,7 @@ def calcular_erros1_1(lista_x_exp, lista_x, lista_t):
                 maior_erro = erro
 
         lista_erro.append(maior_erro)
-    
+
     return lista_erro, max(lista_erro)
 
 #Resolve o exercício 1, iterando o cálculo do Método de Runge-Kutta e dos erros
@@ -103,24 +103,37 @@ def exercicio1_1(T0, Tf, lista_n, x0, A, lista_x_exp):
         plt.xlabel('t')
         plt.ylabel('Erro(t,n=' + str(n) + ')')
         plt.title('Erro dos valores aproximados de x para cada t num passo ' + str(h))
-
-        
-
         plt.show()
+
+    #Cálculo da Razão dos Erros
     lista_R = []
     for i in range (0,5):
         lista_R.append(lista_erro_max[i]/lista_erro_max[i+1])
         print("O valor de R"+str(i+1)+" eh igual a " +str(lista_R[i]))
-    plt.show()
+    plt.show() #Essa parte é necessária?
 #---------------------------------------------------------------------------------------------------
 
-
-
 #Euler explicito, nessa parte vao ficar todos os metodos pedidos como de Euler explicito
+def euler_exp():
 
+    return
 
+#Resolve o Exercício 2.2
+def exercicio2_1(T0, Tf, n, x0, y0, derivadaX, derivadaY, plotar):
+    #Parâmetros do intervalo
+    h = calcular_passo(T0, Tf, n)
+    lista_t = calcular_lista_t(T0, Tf, h)
 
+    #Cálculo do Método de Euler Explícito
+    lista_x = euler_exp(h, x0, y0, derivadaX, lista_t)
+    lista_y = euler_exp(h, y0, x0, derivadaY, lista_t)
 
-
+    #Plotagem do Gráfico
+    if plotar:
+        plt.plot(lista_t, lista_x, label = 'Coelhos', color = 'blue')
+        plt.plot(lista_t, lista_y, label = 'Raposas', color = 'red')
+        plt.title("Modelo presa predador com Euler Explícito e n = " + str(n))
+        plt.show()
+#---------------------------------------------------------------------------------------------------
 
 #Euler implicito, nessa parte vao ficar todos os metodos pedidos como de Euler implicito
