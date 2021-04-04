@@ -379,7 +379,7 @@ def exercicio2_3(lambida, alpha, beta, gama, x0, y0, T0, Tf, lista_n, derivada_x
         #Plotaagem do Gráfico
         plt.plot(lista_t, lista_erro_x, label="Diferença em X", color = "blue")
         plt.plot(lista_t, lista_erro_x, label="Diferença em Y", color = "red")
-        plt.title("Diferença entre Euler Implícito e Explícito")
+        plt.title("Diferença entre Euler Implícito e Explícito, com n = " + str(n))
         plt.show()
 #---------------------------------------------------------------------------------------------------
 ######################## EXERCICO 2 PARTE 4 ##########################################################
@@ -538,7 +538,7 @@ def RK4_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha
         return lista_x, lista_y, lista_z
 
 #Resolve o Exercício 3.1
-def exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, derivada_z, n):
+def exercicio3(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, derivada_z, n):
     for i in range(len(lista_alpha)):
         alpha = lista_alpha[i]
         Tf = lista_Tf[i]
@@ -550,7 +550,7 @@ def exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, 
         #Euler Explícito
         lista_x, lista_y, lista_z = euler_expl_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha)
 
-        #Plotagem dos Gráficos
+        #Plotagem dos Gráficos 3D
         axes = plt.axes(projection = '3d')
         axes.plot3D(lista_x, lista_y, lista_z, 'purple')
         plt.title("Modelo Presa-Predador - Euler Explícito - com alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
@@ -562,11 +562,41 @@ def exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, 
         #Runge Kutta 4
         lista_x, lista_y, lista_z = RK4_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha)
 
-        #Plotagem do Gráfico
+        #Plotagem do Gráfico 3D
         axes = plt.axes(projection = '3d')
         axes.plot3D(lista_x, lista_y, lista_z, 'purple')
         plt.title("Modelo Presa-Predador - Runge Kutta 4 - com alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
         axes.set_xlabel("Coelhos")
         axes.set_ylabel("Lebres")
         axes.set_zlabel("Raposas")
+        plt.show()
+
+        #Gráficos 2D
+
+        #Coelhos x Lebres
+        plt.plot(lista_x, lista_y)
+        plt.xlabel("Coelhos")
+        plt.ylabel("Lebres")
+        plt.title("Lebres X Coelhos, alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
+        plt.show()
+
+        #Coelhos x Raposas
+        plt.plot(lista_x, lista_z)
+        plt.xlabel("Coelhos")
+        plt.ylabel("Raposas")
+        plt.title("Raposas X Coelhos, alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
+        plt.show()
+
+        #Lebres x Raposas
+        plt.plot(lista_y, lista_z)
+        plt.xlabel("Lebres")
+        plt.ylabel("Raposas")
+        plt.title("Raposas X Lebres, alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
+        plt.show()
+
+        #Populações em Função do Tempo
+        plt.plot(lista_t, lista_x, label="Coelhos", color = "blue")
+        plt.plot(lista_t, lista_y, label="Lebres", color = "black")
+        plt.plot(lista_t, lista_z, label="Raposas", color = "red")
+        plt.title("Populações de Raposas e Coelhos em função do tempo - Runge Kutta 4")
         plt.show()
