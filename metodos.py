@@ -210,7 +210,6 @@ def exercicio1_2(T0, Tf, n, x0, x_explicita, montar_G):
 
     #Método de Euler Implícito
     lista_x = euler_imp(lista_t, x0, montar_G, h)
-    print(lista_x)
 
     #Lista dos valores corretos de X
     lista_x_exp = []
@@ -223,16 +222,19 @@ def exercicio1_2(T0, Tf, n, x0, x_explicita, montar_G):
     plt.plot(lista_t, lista_x)
     plt.xlabel('t')
     plt.ylabel('x(t)')
+    plt.title("Solucao aproximada")
     plt.show()
 
     plt.plot(lista_t, lista_x_exp)
     plt.xlabel('t')
     plt.ylabel('x*(t)')
+    plt.title("Solucao explicita")
     plt.show()
 
     plt.plot(lista_t, lista_erros)
     plt.xlabel('t')
     plt.ylabel('Erro(t)')
+    plt.title("Erro")
     plt.show()
 #---------------------------------------------------------------------------------------------------
 ######################## EXERCICO 2 PARTE 1 ##########################################################
@@ -376,23 +378,67 @@ def exercicio2_3(lambida, alpha, beta, gama, x0, y0, T0, Tf, lista_n, derivada_x
 
         #Plotaagem do Gráfico
         plt.plot(lista_t, lista_erro_x, label="Diferença em X", color = "blue")
-        #plt.plot(lista_t, lista_erro_x, label="Diferença em Y", color = "red")
+        plt.plot(lista_t, lista_erro_x, label="Diferença em Y", color = "red")
         plt.title("Diferença dos valoers em X e em Y para os resultados obtidos em cada método")
         plt.show()
 #---------------------------------------------------------------------------------------------------
 ######################## EXERCICO 2 PARTE 4 ##########################################################
 
 #Aplicação do Método de Runge Kutta para um sistema de duas equações
-def RK4_duplo(lista_t, h, x0, y0, derivada_x, derivada_y):
-    
+def RK4_duplo(lista_t, h, x0, y0, derivada_x, derivada_y, alpha, lambida, beta, gama):
+    lista_x = [x0]
+    lista_y = [y0]
+
+    xi = x0
+    yi = y0
+    for i in range(len(lista_t) - 1):
+
+        #k1
+        k1_x = derivada_x(xi, yi, alpha, lambida)
+        k1_y = derivada_y(xi, yi, beta, gama)
+        x_prov = calcular_prox_ponto(xi, k1_x, h / 2) #x provisório
+        y_prov = calcular_prox_ponto(yi, k1_y, h / 2) #y provisório
+
+        #k2
+        k2_x = derivada_x(xi, yi, alpha, lambida)
+        k2_y = derivada_y(xi, yi, beta, gama)
+        x_prov = calcular_prox_ponto(xi, k1_x, h / 2)
+        y_prov = calcular_prox_ponto(yi, k1_y, h / 2)
+
+        #k3
+        k3_x = derivada_x(xi, yi, alpha, lambida)
+        k3_y = derivada_y(xi, yi, beta, gama)
+        x_prov = calcular_prox_ponto(xi, k1_x, h)
+        y_prov = calcular_prox_ponto(yi, k1_y, h)
+
+        #k4
+        k4_x = derivada_x(xi, yi, alpha, lambida)
+        k4_y = derivada_y(xi, yi, beta, gama)
+
+        #média ponderada dos k
+        kp_x = (k1_x + 2*k2_x + 2*k3_x + k4_x) / 6
+        kp_y = (k1_y + 2*k2_y + 2*k3_y + k4_y) / 6
+
+        #valor de x estimado para este t:
+        x = calcular_prox_ponto(xi, kp_x, h)
+        y = calcular_prox_ponto(yi, kp_y, h)
+
+        lista_x.append(x)
+        lista_y.append(y)
+
+        #Atualiza o valor de xi e yi
+        xi = x
+        yi = y
+
+    return lista_x, lista_y
 
 #Resolve o Exercício 2.4
-def exercicio2_4(T0, Tf, n, derivada_x, derivada_y, x0, y0):
+def exercicio2_4(T0, Tf, n, derivada_x, derivada_y, x0, y0, alpha, lambida, beta, gama):
     #Parâmetros do Intervalo
     h = calcular_passo(T0, Tf, n)
     lista_t = calcular_lista_t(T0, Tf, h)
 
-    lista_x, lista_y = RK4_duplo(lista_t, h, x0, y0, derivada_x, derivada_y)
+    lista_x, lista_y = RK4_duplo(lista_t, h, x0, y0, derivada_x, derivada_y, alpha, lambida, beta, gama)
 
     #Plotagem dos Gráficos
     plt.plot(lista_t, lista_x, label="Coelhos", color = "red")
@@ -405,3 +451,25 @@ def exercicio2_4(T0, Tf, n, derivada_x, derivada_y, x0, y0):
     plt.ylabel("Raposas")
     plt.title("População de Raposas em função da População de Coelhos")
     plt.show()
+#---------------------------------------------------------------------------------------------------
+######################## EXERCICO 3 PARTE 1 ##########################################################
+
+#Resolve o Exercício 3.1
+def exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, derivada_z, n):
+    for i in range(len(lista_alpha)):
+        alpha = lista_alpha[i]
+        Tf = lista_Tf[i]
+
+        #Parâmetros do Intervalo
+        h = calcular_passo(T0, Tf, n)
+        lista_t =  calcular_lista_t(T0, Tf, h)
+
+        lista_x, lista_y, lista_z = euler_expl_triplo(h, lista_t, x0, derivada_x, y0, derivada_z, z0, derivada_z, alpha)
+
+        #Plotagem do Gráfico
+
+
+
+        lista_x, lista_y, lista_z = RK4_triplo(h, lista_t, x0, derivada_x, y0, derivada_z, z0, derivada_z, alpha)
+
+        #Plotagem do Gráfico
