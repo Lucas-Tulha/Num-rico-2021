@@ -1,7 +1,7 @@
 #Módulos Necessários
 import numpy as np
 from math import exp, cos, sin
-#from metodos import exercicio2_1, exercicio2_2, exercicio2_3, exercicio2_4
+from metodos import exercicio3_1
 #---------------------------------------------------------------------------------------------------
 ######################################### EXERCÍCIO 3 PARTE 1 ######################################
 
@@ -28,4 +28,4 @@ lista_Tf = [100, 100, 500, 500, 2000, 2000]
 #---------------------------------------------------------------------------------------------------
 
 #Execução dos Exerícios
-#exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, derivada_z, n)
+exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, derivada_z, n)

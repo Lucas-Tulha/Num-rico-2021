@@ -68,10 +68,10 @@ def montar_J(x, y, h):
 lista_n = [250, 500, 1000, 2000, 4000]
 #---------------------------------------------------------------------------------------------------
 #Execução dos Exerícios
-exercicio2_1(lambida, alpha, beta, gama, x0, y0, T0, Tf, n, derivada_x, derivada_y, plotar=True)
+#exercicio2_1(lambida, alpha, beta, gama, x0, y0, T0, Tf, n, derivada_x, derivada_y, plotar=True)
 
-exercicio2_2(x0, y0, T0, Tf, n, montar_G_duplo, montar_J, plotar=True)
+#exercicio2_2(x0, y0, T0, Tf, n, montar_G_duplo, montar_J, plotar=True)
 
-exercicio2_3(lambida, alpha, beta, gama, x0, y0, T0, Tf, lista_n, derivada_x, derivada_y, montar_G_duplo, montar_J)
+#exercicio2_3(lambida, alpha, beta, gama, x0, y0, T0, Tf, lista_n, derivada_x, derivada_y, montar_G_duplo, montar_J)
 
 exercicio2_4(T0, Tf, n, derivada_x, derivada_y, x0, y0, alpha, lambida, beta, gama)

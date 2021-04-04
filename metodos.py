@@ -271,13 +271,13 @@ def exercicio2_1(lambida, alpha, beta, gama, x0, y0, T0, Tf, n, derivada_x, deri
         #Plotagem dos Gráficos
         plt.plot(lista_t, lista_x, label="Coelhos", color = "red")
         plt.plot(lista_t, lista_y, label="Raposas", color = "blue")
-        plt.title("Populações de Raposas e Coelhos em função do tempo - Modelo Presa Predador")
+        plt.title("Populações de Raposas e Coelhos em função do tempo - Euler Explícito")
         plt.show()
 
         plt.plot(lista_x, lista_y)
         plt.xlabel("Coelhos")
         plt.ylabel("Raposas")
-        plt.title("População de Raposas em função da População de Coelhos")
+        plt.title("População de Raposas em função da População de Coelhos - Euler Explícito")
         plt.show()
 
     return lista_x, lista_y
@@ -341,13 +341,13 @@ def exercicio2_2(x0, y0, T0, Tf, n, montar_G_duplo, montar_J, plotar):
         #Plotagem dos Gráficos
         plt.plot(lista_t, lista_x, label="Coelhos", color = "red")
         plt.plot(lista_t, lista_y, label="Raposas", color = "blue")
-        plt.title("Populações de Raposas e Coelhos em função do tempo - Modelo Presa Predador")
+        plt.title("Populações de Raposas e Coelhos em função do tempo - Euler Implícito")
         plt.show()
 
         plt.plot(lista_x, lista_y)
         plt.xlabel("Coelhos")
         plt.ylabel("Raposas")
-        plt.title("População de Raposas em função da População de Coelhos")
+        plt.title("População de Raposas em função da População de Coelhos - Euler Implícito")
         plt.show()
 
     return lista_x, lista_y
@@ -379,7 +379,7 @@ def exercicio2_3(lambida, alpha, beta, gama, x0, y0, T0, Tf, lista_n, derivada_x
         #Plotaagem do Gráfico
         plt.plot(lista_t, lista_erro_x, label="Diferença em X", color = "blue")
         plt.plot(lista_t, lista_erro_x, label="Diferença em Y", color = "red")
-        plt.title("Diferença dos valoers em X e em Y para os resultados obtidos em cada método")
+        plt.title("Diferença entre Euler Implícito e Explícito")
         plt.show()
 #---------------------------------------------------------------------------------------------------
 ######################## EXERCICO 2 PARTE 4 ##########################################################
@@ -400,20 +400,20 @@ def RK4_duplo(lista_t, h, x0, y0, derivada_x, derivada_y, alpha, lambida, beta, 
         y_prov = calcular_prox_ponto(yi, k1_y, h / 2) #y provisório
 
         #k2
-        k2_x = derivada_x(xi, yi, alpha, lambida)
-        k2_y = derivada_y(xi, yi, beta, gama)
-        x_prov = calcular_prox_ponto(xi, k1_x, h / 2)
-        y_prov = calcular_prox_ponto(yi, k1_y, h / 2)
+        k2_x = derivada_x(x_prov, y_prov, alpha, lambida)
+        k2_y = derivada_y(x_prov, y_prov, beta, gama)
+        x_prov = calcular_prox_ponto(xi, k2_x, h / 2)
+        y_prov = calcular_prox_ponto(yi, k2_y, h / 2)
 
         #k3
-        k3_x = derivada_x(xi, yi, alpha, lambida)
-        k3_y = derivada_y(xi, yi, beta, gama)
-        x_prov = calcular_prox_ponto(xi, k1_x, h)
-        y_prov = calcular_prox_ponto(yi, k1_y, h)
+        k3_x = derivada_x(x_prov, y_prov, alpha, lambida)
+        k3_y = derivada_y(x_prov, y_prov, beta, gama)
+        x_prov = calcular_prox_ponto(xi, k3_x, h)
+        y_prov = calcular_prox_ponto(yi, k3_y, h)
 
         #k4
-        k4_x = derivada_x(xi, yi, alpha, lambida)
-        k4_y = derivada_y(xi, yi, beta, gama)
+        k4_x = derivada_x(x_prov, y_prov, alpha, lambida)
+        k4_y = derivada_y(x_prov, y_prov, beta, gama)
 
         #média ponderada dos k
         kp_x = (k1_x + 2*k2_x + 2*k3_x + k4_x) / 6
@@ -443,16 +443,99 @@ def exercicio2_4(T0, Tf, n, derivada_x, derivada_y, x0, y0, alpha, lambida, beta
     #Plotagem dos Gráficos
     plt.plot(lista_t, lista_x, label="Coelhos", color = "red")
     plt.plot(lista_t, lista_y, label="Raposas", color = "blue")
-    plt.title("Populações de Raposas e Coelhos em função do tempo - Modelo Presa Predador")
+    plt.title("Populações de Raposas e Coelhos em função do tempo - Runge Kutta 4")
     plt.show()
 
     plt.plot(lista_x, lista_y)
     plt.xlabel("Coelhos")
     plt.ylabel("Raposas")
-    plt.title("População de Raposas em função da População de Coelhos")
+    plt.title("População de Raposas em função da População de Coelhos - Runge Kutta 4")
     plt.show()
 #---------------------------------------------------------------------------------------------------
 ######################## EXERCICO 3 PARTE 1 ##########################################################
+
+def euler_expl_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha):
+    lista_x = [x0]
+    lista_y = [y0]
+    lista_z = [z0]
+
+    xi = x0
+    yi = y0
+    zi = z0
+    for i in range(len(lista_t) -1):
+        x = xi + h * derivada_x(xi, yi, zi)
+        lista_x.append(x)
+        y = yi + h * derivada_y(xi, yi, zi)
+        lista_y.append(y)
+        z = zi + h * derivada_z(xi, yi, zi, alpha)
+        lista_z.append(z)
+
+        xi = x
+        yi = y
+        zi = z
+
+    return lista_x, lista_y, lista_z
+
+
+def RK4_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha):
+        lista_x = [x0]
+        lista_y = [y0]
+        lista_z = [z0]
+
+        xi = x0
+        yi = y0
+        zi = z0
+        for i in range(len(lista_t) - 1):
+
+            #k1
+            k1_x = derivada_x(xi, yi, zi)
+            k1_y = derivada_y(xi, yi, zi)
+            k1_z = derivada_z(xi, yi, zi, alpha)
+            x_prov = calcular_prox_ponto(xi, k1_x, h / 2) #x provisório
+            y_prov = calcular_prox_ponto(yi, k1_y, h / 2) #y provisório
+            z_prov = calcular_prox_ponto(zi, k1_z, h / 2) #z provisório
+
+            #k2
+            k2_x = derivada_x(x_prov, y_prov, z_prov)
+            k2_y = derivada_y(x_prov, y_prov, z_prov)
+            k2_z = derivada_z(x_prov, y_prov, z_prov, alpha)
+            x_prov = calcular_prox_ponto(xi, k2_x, h / 2)
+            y_prov = calcular_prox_ponto(yi, k2_y, h / 2)
+            z_prov = calcular_prox_ponto(zi, k2_z, h / 2)
+
+            #k3
+            k3_x = derivada_x(x_prov, y_prov, z_prov)
+            k3_y = derivada_y(x_prov, y_prov, z_prov)
+            k3_z = derivada_z(x_prov, y_prov, z_prov, alpha)
+            x_prov = calcular_prox_ponto(xi, k3_x, h)
+            y_prov = calcular_prox_ponto(yi, k3_y, h)
+            z_prov = calcular_prox_ponto(zi, k3_z, h)
+
+            #k4
+            k4_x = derivada_x(x_prov, y_prov, z_prov)
+            k4_y = derivada_y(x_prov, y_prov, z_prov)
+            k4_z = derivada_z(x_prov, y_prov, z_prov, alpha)
+
+            #média ponderada dos k
+            kp_x = (k1_x + 2*k2_x + 2*k3_x + k4_x) / 6
+            kp_y = (k1_y + 2*k2_y + 2*k3_y + k4_y) / 6
+            kp_z = (k1_z + 2*k2_z + 2*k3_z + k4_z) / 6
+
+            #valor de x estimado para este t:
+            x = calcular_prox_ponto(xi, kp_x, h)
+            y = calcular_prox_ponto(yi, kp_y, h)
+            z = calcular_prox_ponto(zi, kp_z, h)
+
+            lista_x.append(x)
+            lista_y.append(y)
+            lista_z.append(z)
+
+            #Atualiza o valor de xi, yi e zi
+            xi = x
+            yi = y
+            zi = z
+
+        return lista_x, lista_y, lista_z
 
 #Resolve o Exercício 3.1
 def exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, derivada_z, n):
@@ -464,12 +547,26 @@ def exercicio3_1(lista_alpha, x0, y0, z0, T0, lista_Tf, derivada_x, derivada_y, 
         h = calcular_passo(T0, Tf, n)
         lista_t =  calcular_lista_t(T0, Tf, h)
 
-        lista_x, lista_y, lista_z = euler_expl_triplo(h, lista_t, x0, derivada_x, y0, derivada_z, z0, derivada_z, alpha)
+        #Euler Explícito
+        lista_x, lista_y, lista_z = euler_expl_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha)
+
+        #Plotagem dos Gráficos
+        axes = plt.axes(projection = '3d')
+        axes.plot3D(lista_x, lista_y, lista_z, 'purple')
+        plt.title("Modelo Presa-Predador - Euler Explícito - com alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
+        axes.set_xlabel("Coelhos")
+        axes.set_ylabel("Lebres")
+        axes.set_zlabel("Raposas")
+        plt.show()
+
+        #Runge Kutta 4
+        lista_x, lista_y, lista_z = RK4_triplo(h, lista_t, x0, derivada_x, y0, derivada_y, z0, derivada_z, alpha)
 
         #Plotagem do Gráfico
-
-
-
-        lista_x, lista_y, lista_z = RK4_triplo(h, lista_t, x0, derivada_x, y0, derivada_z, z0, derivada_z, alpha)
-
-        #Plotagem do Gráfico
+        axes = plt.axes(projection = '3d')
+        axes.plot3D(lista_x, lista_y, lista_z, 'purple')
+        plt.title("Modelo Presa-Predador - Runge Kutta 4 - com alpha = " + str(alpha) + " e intervalo [" + str(T0) + ',' + str(Tf) + ']')
+        axes.set_xlabel("Coelhos")
+        axes.set_ylabel("Lebres")
+        axes.set_zlabel("Raposas")
+        plt.show()
